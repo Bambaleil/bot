@@ -6,8 +6,6 @@ class UserInfoState(StatesGroup):
     Класс состояний пользователя (сценарий пользователя).
     city = Город в котором будет искаться отели.
     location = уточнение местоположения в городе
-    check_in = Дата заезда.
-    check_out = дата выезда.
     photo = нужны ли фото отелей.
     num_photo = Количество фото отеля.
     num_hostels = Количество отелей.
@@ -16,8 +14,6 @@ class UserInfoState(StatesGroup):
     """
     city = State()
     location = State()
-    check_in = State()
-    check_out = State()
     photo = State()
     num_photo = State()
     num_hostels = State()
