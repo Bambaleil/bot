@@ -1,13 +1,14 @@
-from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
-from loader import bot
-from telebot.types import Message, CallbackQuery
-
 from datetime import date, datetime
+
+from telebot.types import Message, CallbackQuery
+from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
+
+from keyboards.inline.yes_no_buttons import yes_no
+from loader import bot
 from states.state_user_hotel import UserInfoState
 
 
 def calendar_1(message: Message) -> None:
-
     calendar, step = DetailedTelegramCalendar(calendar_id=1, min_date=date.today()).build()
     bot.send_message(message.chat.id, f'Выберите дату заезда {LSTEP[step]}', reply_markup=calendar)
 
@@ -49,4 +50,4 @@ def calendar_check_out(call: CallbackQuery) -> None:
                               call.message.chat.id,
                               call.message.message_id)
         bot.set_state(user_id=call.message.chat.id, state=UserInfoState.photo, chat_id=call.message.chat.id)
-        bot.send_message(call.message.chat.id, 'Нужны ли вам фотографии отелей ?')
+        bot.send_message(call.message.chat.id, 'Нужны ли вам фотографии отелей ?', reply_markup=yes_no())

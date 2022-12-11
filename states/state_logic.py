@@ -1,6 +1,7 @@
 from telebot.types import Message
 
 from keyboards.inline import calendar_buttons
+from keyboards.inline import number_of_photo, number_of_hotels
 from loader import bot
 from states.state_user_hotel import UserInfoState
 
@@ -8,7 +9,6 @@ from states.state_user_hotel import UserInfoState
 @bot.message_handler(state=UserInfoState.city)
 def get_city(message: Message) -> None:
     """ Функция записывает город и спрашивает локацию"""
-
     if message.text.isalpha():
         bot.send_message(message.from_user.id, 'Ваш город {city}.'.format(city=message.text))
         bot.set_state(user_id=message.from_user.id, state=UserInfoState.location, chat_id=message.chat.id)
@@ -26,11 +26,15 @@ def get_location(message: Message):
 @bot.message_handler(state=UserInfoState.photo)
 def get_photo(message: Message) -> None:
     """ Функция спрашивает потребность фото для отелей """
-    if message.text.lower() == 'да':  # Сделать кнопки
-        bot.send_message(message.from_user.id, 'Введите количество фото не больше 5.')  # сделать кнопки
+    if message.text.lower() == 'да':
+        bot.send_message(message.from_user.id, 'Введите количество фото не больше 5.',
+                         reply_markup=number_of_photo.number_buttons_p()
+                         )
         bot.set_state(user_id=message.from_user.id, state=UserInfoState.num_photo, chat_id=message.chat.id)
     elif message.text.lower() == 'нет':
-        bot.send_message(message.from_user.id, 'Введите количество отелей не больше 10.')
+        bot.send_message(message.from_user.id, 'Введите количество отелей не больше 10.',
+                         reply_markup=number_of_hotels.number_buttons_h()
+                         )
         bot.set_state(user_id=message.from_user.id, state=UserInfoState.num_hostels, chat_id=message.chat.id)
     else:
         bot.send_message(message.from_user.id, 'напишите пожалуйста да или нет.')
@@ -39,8 +43,10 @@ def get_photo(message: Message) -> None:
 @bot.message_handler(state=UserInfoState.num_photo)
 def get_num_photo(message: Message) -> None:
     """ Функция спрашивает количество фото для отеля """
-    if message.text in ['1', '2', '3', '4', '5']:  # допелить кнопки выбора
-        bot.send_message(message.from_user.id, 'Введите количество отелей не больше 10.')
+    if message.text in ['1', '2', '3', '4', '5']:
+        bot.send_message(message.from_user.id, 'Введите количество отелей не больше 10.',
+                         reply_markup=number_of_hotels.number_buttons_h()
+                         )
         bot.set_state(user_id=message.from_user.id, state=UserInfoState.num_hostels, chat_id=message.chat.id)
     else:
         bot.send_message(message.from_user.id, f'Неправильно попробуй еще раз')
@@ -49,8 +55,7 @@ def get_num_photo(message: Message) -> None:
 @bot.message_handler(state=UserInfoState.num_hostels)
 def get_num_hostels(message: Message) -> None:
     """ Функция спрашивает количество отелей"""
-
-    if message.text in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']:  # допелить кнопки выбора
+    if message.text in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']:
         bot.send_message(message.from_user.id, f'Спасибо')
         bot.set_state(user_id=message.from_user.id, state=UserInfoState.num_hostels, chat_id=message.chat.id)
     else:
