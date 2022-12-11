@@ -3,7 +3,7 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from keyboards.inline import number_of_photo
 from loader import bot
-from recurring_features.state_num_hostel import state_num_hostel
+from recurring_features.state_min_price_1 import state_min_price_1
 from states.state_user_hotel import UserInfoState
 
 
@@ -36,4 +36,4 @@ def process_callback_kb1btn1(callback_query: types.CallbackQuery):
             chat_id=callback_query.message.chat.id
         )
     elif code == '2':
-        state_num_hostel(callback_query=callback_query)  # повторяющийся функция изменения состояния num_hostels
+        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price

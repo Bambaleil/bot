@@ -1,2 +1,2 @@
-from . import state_num_hostel
-from . import state_end
+from . import state_min_price_1
+from . import state_min_price_2

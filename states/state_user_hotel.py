@@ -11,6 +11,7 @@ class UserInfoState(StatesGroup):
     num_hostels = Количество отелей.
     min_price = Минимальная цена отеля.
     max_price = Максимальная цена отеля.
+    distance = Расстояние от центра города
     """
     city = State()
     location = State()
@@ -19,3 +20,4 @@ class UserInfoState(StatesGroup):
     num_hostels = State()
     min_price = State()
     max_price = State()
+    distance = State()

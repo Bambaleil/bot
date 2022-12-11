@@ -5,7 +5,7 @@ from loader import bot
 from states.state_user_hotel import UserInfoState
 
 
-def state_num_hostel(callback_query: types.CallbackQuery) -> None:
+def state_min_price_1(callback_query: types.CallbackQuery) -> None:  # Тут надо словить команды и сделать разделения
     bot.send_message(
         chat_id=callback_query.message.chat.id,
         text='Введите количество отелей не больше 10.',
@@ -13,6 +13,6 @@ def state_num_hostel(callback_query: types.CallbackQuery) -> None:
     )
     bot.set_state(
         user_id=callback_query.message.chat.id,
-        state=UserInfoState.num_hostels,
+        state=UserInfoState.min_price,
         chat_id=callback_query.message.chat.id
     )

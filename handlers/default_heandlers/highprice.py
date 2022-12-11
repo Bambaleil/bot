@@ -13,3 +13,9 @@ def highprice(message: Message) -> None:
     bot.send_message(message.from_user.id, "Привет, {name} веди город где будете искать отель."
                      .format(name=message.from_user.full_name))
     get_city(message=message)  # функция из файла state_logic
+
+
+@bot.message_handler(state=UserInfoState.min_price)
+def get_min_price(message: Message):
+    """ Функция записывает минимальную цену и запрашивает максимальную цену отеля """
+    bot.send_message(message.from_user.id, "Вот тут все ваши отели.")

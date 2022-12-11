@@ -1,6 +1,6 @@
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from recurring_features.state_end import state_end
+from recurring_features.state_min_price_2 import state_min_price_2
 from loader import bot
 
 
@@ -30,32 +30,32 @@ def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     )
 
     if code == '1':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали одно отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали один отель.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '2':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали два отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали два отеля.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '3':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали три отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали три отеля.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '4':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали четыре отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали четыре отеля.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '5':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали пять отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали пять отелей.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '6':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали шесть отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали шесть отелей.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '7':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали семь отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали семь отелей.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '8':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали восемь отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали восемь отелей.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '9':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали девять отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали девять отелей.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
     elif code == '10':
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали десять отелей')
-        state_end(callback_query=callback_query)  # повторяющийся функция изменения состояния на неопределенное
+        bot.send_message(callback_query.from_user.id, text='Вы выбрали десять отелей.')
+        state_min_price_2(callback_query=callback_query)  # повторяющийся функция изменения состояния на min_price
