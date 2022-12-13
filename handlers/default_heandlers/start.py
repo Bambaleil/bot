@@ -1,11 +1,11 @@
 from telebot.types import Message
-from loader import bot
+
 from keyboards.reply.start_buttons import start_buttons
+from loader import bot
 
 
 @bot.message_handler(commands=['start'])
 def bot_start(message: Message) -> None:
-
     """ Функция, которая запускает бота и выводит стартовое сообщение с кнопками"""
 
     bot.send_message(message.from_user.id, "Привет, {name}!"

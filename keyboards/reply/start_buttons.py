@@ -1,10 +1,10 @@
-from telebot import types
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def start_buttons():
+def start_buttons() -> ReplyKeyboardMarkup:
     """ Стартовые кнопки на панели бота"""
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton("/help")
-    btn2 = types.KeyboardButton("/history")
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = KeyboardButton("/help")
+    btn2 = KeyboardButton("/history")
     markup.add(btn1, btn2)
     return markup
