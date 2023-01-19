@@ -1,9 +1,9 @@
+from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from keyboards.inline import number_of_photo
+from keyboards.inline import number_of_photo, number_of_hotels
 from loader import bot
-from recurring_features.state_min_price_1 import state_min_price_1
 from states.state_user_hotel import UserInfoState
 
 
@@ -24,7 +24,8 @@ def process_callback_kb1btn1(callback_query: types.CallbackQuery):
         message_id=callback_query.message.message_id
     )
     if code == '1':
-        bot.send_message(callback_query.from_user.id, text='Нажали да')
+        logger.info(f'пользователь нажал да.')
+        bot.send_message(callback_query.from_user.id, text='Нажали да.')
         bot.send_message(
             chat_id=callback_query.message.chat.id,
             text='Введите количество фото не больше 5.',
@@ -36,4 +37,9 @@ def process_callback_kb1btn1(callback_query: types.CallbackQuery):
             chat_id=callback_query.message.chat.id
         )
     elif code == '2':
-        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price
+        logger.info(f'пользователь нажал нет.')
+        bot.send_message(
+            chat_id=callback_query.message.chat.id,
+            text='Введите количество отелей не больше 10.',
+            reply_markup=number_of_hotels.number_buttons_h()
+        )
