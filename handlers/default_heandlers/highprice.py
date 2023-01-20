@@ -2,7 +2,7 @@ from loguru import logger
 from telebot.types import Message
 
 from database.db_user import check_user_decorator
-from database.peewee import Request
+from database.db import Request
 from loader import bot
 from states.state_user_hotel import UserInfoState
 

@@ -2,7 +2,7 @@ from loguru import logger
 from telebot.types import Message
 
 from database.db_user import check_user_decorator
-from database.peewee import Request
+from database.db import Request
 from handlers.default_heandlers.cancel import cancel_world_decorator
 from keyboards.inline import calendar_buttons
 from keyboards.inline import number_of_photo, number_of_hotels

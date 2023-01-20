@@ -5,7 +5,7 @@ from telebot.types import Message, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
 from database.db_user import check_user_decorator
-from database.peewee import Request
+from database.db import Request
 from handlers.default_heandlers.cancel import cancel_world_decorator
 from keyboards.inline.yes_no_buttons import yes_no
 from loader import bot

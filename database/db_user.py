@@ -7,8 +7,8 @@ from telebot.types import CallbackQuery
 from telebot.types import Chat
 from telebot.types import User
 
-from database.peewee import Request
-from database.peewee import db
+from database.db import Request
+from database.db import db
 
 
 def check_user_decorator(func):
