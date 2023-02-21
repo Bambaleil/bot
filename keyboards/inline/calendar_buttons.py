@@ -6,16 +6,9 @@ from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
 from database.db_user import check_user_decorator
 from database.db import Request
-from handlers.default_heandlers.cancel import cancel_world_decorator
 from keyboards.inline.yes_no_buttons import yes_no
 from loader import bot
 from states.state_user_hotel import UserInfoState
-
-
-def calendar_1(message: Message) -> None:
-    calendar, step = DetailedTelegramCalendar(calendar_id=1, min_date=date.today()).build()
-    bot.send_message(message.chat.id, f'Выберите дату заезда {LSTEP[step]}', reply_markup=calendar)
-    logger.info(f'Пользователь выбрал локацию.')
 
 
 def calendar_2(message: Message) -> None:
@@ -25,7 +18,6 @@ def calendar_2(message: Message) -> None:
 
 @bot.callback_query_handler(func=DetailedTelegramCalendar.func(calendar_id=1))
 @check_user_decorator
-@cancel_world_decorator
 def calendar_check_in(call: CallbackQuery, user_request: Request) -> None:
     """ Календарь заезда. Запись заезда. """
     result, key, step = DetailedTelegramCalendar(calendar_id=1, locale='ru', min_date=date.today()).process(call.data)
@@ -47,7 +39,6 @@ def calendar_check_in(call: CallbackQuery, user_request: Request) -> None:
 
 @bot.callback_query_handler(func=DetailedTelegramCalendar.func(calendar_id=2))
 @check_user_decorator
-@cancel_world_decorator
 def calendar_check_out(call: CallbackQuery, user_request: Request) -> None:
     """ Календарь выезда. Запись выезда. """
     result, key, step = DetailedTelegramCalendar(locale='ru',

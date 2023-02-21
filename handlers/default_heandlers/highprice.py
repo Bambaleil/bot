@@ -21,5 +21,4 @@ def highprice(message: Message, user_request: Request) -> None:
 
 @bot.message_handler(states=UserInfoState.end_lowprice)
 def hostel(message: Message):
-    bot.send_message(message.from_user.id, 'Все')
     bot.set_state(user_id=message.from_user.id, state=None, chat_id=message.chat.id)

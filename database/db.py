@@ -22,7 +22,7 @@ class Request(BaseModel):
     user_id = CharField()
     command = CharField()
     city = CharField()
-    location = IntegerField()
+    location_id = IntegerField()
     check_in = DateField()
     check_out = DateField()
     num_photo = IntegerField()
@@ -41,7 +41,7 @@ class History(BaseModel):
     """
     user_id = ForeignKeyField(Request)  # User[id]
     command = CharField()
-    command_time = DateField()
+    command_time = DateTimeField()
     currency = CharField()
 
     class Meta:

@@ -72,7 +72,7 @@ def add_new_user(user_id: int) -> Request:
         user_id=user_id,
         command='',
         city='',
-        location='',
+        location_id=0,
         check_in=date.today(),
         check_out=date.today(),
         num_photo=0,
