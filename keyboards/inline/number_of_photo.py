@@ -1,12 +1,16 @@
+from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+from database.db_user import check_user_decorator
+from database.peewee import Request
+from keyboards.inline import number_of_hotels
 from loader import bot
-from recurring_features.state_min_price_1 import state_min_price_1
+from states.state_user_hotel import UserInfoState
 
 
 def number_buttons_p() -> InlineKeyboardMarkup:
-    """ Клавиатура выбора количества фото, максимум 5"""
+    """ Клавиатура выбора количества фото, максимум 5 """
     key_bord = InlineKeyboardMarkup(row_width=5)
     bth_1 = InlineKeyboardButton('1', callback_data='button_p_1')
     bth_2 = InlineKeyboardButton('2', callback_data='button_p_2')
@@ -18,7 +22,8 @@ def number_buttons_p() -> InlineKeyboardMarkup:
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_p_'))
-def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+@check_user_decorator
+def process_callback_kb1btn1(callback_query: types.CallbackQuery, user_request: Request):
     code = callback_query.data[-1]
     bot.edit_message_reply_markup(
         chat_id=callback_query.message.chat.id,
@@ -26,17 +31,33 @@ def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     )
 
     if code == '1':
+        logger.info('Пользователь нажал кнопку 1 для фото.')
+        user_request.num_photo = 1
         bot.send_message(callback_query.from_user.id, text='Вы выбрали одно фото.')
-        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price
     elif code == '2':
+        logger.info('Пользователь нажал кнопку 2 для фото.')
+        user_request.num_photo = 2
         bot.send_message(callback_query.from_user.id, text='Вы выбрали два фото.')
-        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price
     elif code == '3':
+        logger.info('Пользователь нажал кнопку 3 для фото.')
+        user_request.num_photo = 3
         bot.send_message(callback_query.from_user.id, text='Вы выбрали три фото.')
-        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price
     elif code == '4':
+        logger.info('Пользователь нажал кнопку 4 для фото.')
+        user_request.num_photo = 4
         bot.send_message(callback_query.from_user.id, text='Вы выбрали четыре фото.')
-        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price
     elif code == '5':
+        logger.info('Пользователь нажал кнопку 5 для фото.')
+        user_request.num_photo = 5
         bot.send_message(callback_query.from_user.id, text='Вы выбрали пять фото.')
-        state_min_price_1(callback_query=callback_query)  # повторяющийся функция изменения состояния min_price
+    user_request.save()
+    bot.send_message(
+        chat_id=callback_query.message.chat.id,
+        text='Введите количество отелей не больше 10.',
+        reply_markup=number_of_hotels.number_buttons_h()
+    )
+    bot.set_state(
+        user_id=callback_query.message.chat.id,
+        state=UserInfoState.num_hostels,
+        chat_id=callback_query.message.chat.id
+    )

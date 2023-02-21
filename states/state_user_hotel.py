@@ -3,14 +3,14 @@ from telebot.handler_backends import State, StatesGroup
 
 class UserInfoState(StatesGroup):
     """
-    Класс состояний пользователя (сценарий пользователя).
-    city = Город в котором будет искаться отели.
+    Класс состояний пользователя (сценарий пользователя)
+    city = Город в котором будет искаться отели
     location = уточнение местоположения в городе
-    photo = нужны ли фото отелей.
-    num_photo = Количество фото отеля.
-    num_hostels = Количество отелей.
-    min_price = Минимальная цена отеля.
-    max_price = Максимальная цена отеля.
+    photo = нужны ли фото отелей
+    num_photo = Количество фото отеля
+    num_hostels = Количество отелей
+    min_price = Минимальная цена отеля
+    max_price = Максимальная цена отеля
     distance = Расстояние от центра города
     """
     city = State()
@@ -21,3 +21,5 @@ class UserInfoState(StatesGroup):
     min_price = State()
     max_price = State()
     distance = State()
+    end_lowprice = State()
+    end_highprice = State()
