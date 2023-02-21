@@ -8,3 +8,4 @@ from loader import bot
 def bot_start(message: Message):
     logger.info('Пользователь задействовал команду /history.')
     bot.reply_to(message, 'Привет, я пока ничего не умею (')
+    pass
