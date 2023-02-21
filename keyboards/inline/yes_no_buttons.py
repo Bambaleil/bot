@@ -2,6 +2,8 @@ from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+from database.db import Request
+from database.db_user import check_user_decorator
 from keyboards.inline import number_of_photo, number_of_hotels
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -17,7 +19,8 @@ def yes_no() -> InlineKeyboardMarkup:
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_'))
-def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+@check_user_decorator
+def process_callback_kb1btn1(callback_query: types.CallbackQuery, user_request: Request):
     code = callback_query.data[-1]
     bot.edit_message_reply_markup(
         chat_id=callback_query.message.chat.id,
@@ -25,19 +28,26 @@ def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     )
     if code == '1':
         logger.info(f'пользователь нажал да.')
+        bot.set_state(
+            user_id=callback_query.message.chat.id,
+            state=UserInfoState.num_photo,
+            chat_id=callback_query.message.chat.id
+        )
         bot.send_message(callback_query.from_user.id, text='Нажали да.')
         bot.send_message(
             chat_id=callback_query.message.chat.id,
             text='Введите количество фото не больше 5.',
             reply_markup=number_of_photo.number_buttons_p()
         )
-        bot.set_state(
-            user_id=callback_query.message.chat.id,
-            state=UserInfoState.num_photo,
-            chat_id=callback_query.message.chat.id
-        )
     elif code == '2':
         logger.info(f'пользователь нажал нет.')
+        user_request.num_photo = 0
+        user_request.save()
+        bot.set_state(
+            user_id=callback_query.message.chat.id,
+            state=UserInfoState.num_hostels,
+            chat_id=callback_query.message.chat.id
+        )
         bot.send_message(
             chat_id=callback_query.message.chat.id,
             text='Введите количество отелей не больше 10.',

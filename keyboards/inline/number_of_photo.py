@@ -3,7 +3,7 @@ from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from database.db_user import check_user_decorator
-from database.peewee import Request
+from database.db import Request
 from keyboards.inline import number_of_hotels
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -23,41 +23,41 @@ def number_buttons_p() -> InlineKeyboardMarkup:
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_p_'))
 @check_user_decorator
-def process_callback_kb1btn1(callback_query: types.CallbackQuery, user_request: Request):
-    code = callback_query.data[-1]
+def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
+    code = call.data[-1]
     bot.edit_message_reply_markup(
-        chat_id=callback_query.message.chat.id,
-        message_id=callback_query.message.message_id
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id
+    )
+    bot.set_state(
+        user_id=call.message.chat.id,
+        state=UserInfoState.num_hostels,
+        chat_id=call.message.chat.id
     )
 
     if code == '1':
         logger.info('Пользователь нажал кнопку 1 для фото.')
         user_request.num_photo = 1
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали одно фото.')
+        bot.send_message(call.from_user.id, text='Вы выбрали одно фото.')
     elif code == '2':
         logger.info('Пользователь нажал кнопку 2 для фото.')
         user_request.num_photo = 2
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали два фото.')
+        bot.send_message(call.from_user.id, text='Вы выбрали два фото.')
     elif code == '3':
         logger.info('Пользователь нажал кнопку 3 для фото.')
         user_request.num_photo = 3
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали три фото.')
+        bot.send_message(call.from_user.id, text='Вы выбрали три фото.')
     elif code == '4':
         logger.info('Пользователь нажал кнопку 4 для фото.')
         user_request.num_photo = 4
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали четыре фото.')
+        bot.send_message(call.from_user.id, text='Вы выбрали четыре фото.')
     elif code == '5':
         logger.info('Пользователь нажал кнопку 5 для фото.')
         user_request.num_photo = 5
-        bot.send_message(callback_query.from_user.id, text='Вы выбрали пять фото.')
+        bot.send_message(call.from_user.id, text='Вы выбрали пять фото.')
     user_request.save()
     bot.send_message(
-        chat_id=callback_query.message.chat.id,
+        chat_id=call.message.chat.id,
         text='Введите количество отелей не больше 10.',
         reply_markup=number_of_hotels.number_buttons_h()
-    )
-    bot.set_state(
-        user_id=callback_query.message.chat.id,
-        state=UserInfoState.num_hostels,
-        chat_id=callback_query.message.chat.id
     )

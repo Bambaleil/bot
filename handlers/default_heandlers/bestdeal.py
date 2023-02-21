@@ -1,8 +1,9 @@
 from loguru import logger
 from telebot.types import Message
 
+from database.db_history_command import get_hotels_command
 from database.db_user import check_user_decorator
-from database.peewee import Request
+from database.db import Request
 from handlers.default_heandlers.cancel import cancel_world_decorator
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -65,6 +66,7 @@ def get_distance(message: Message, user_request: Request):
         user_request.distance = int(message.text)
         user_request.save()
         bot.send_message(message.from_user.id, 'Ваши отели.')
+        get_hotels_command(message)
         bot.set_state(user_id=message.from_user.id, state=None, chat_id=message.chat.id)
     else:
         bot.send_message(message.from_user.id,

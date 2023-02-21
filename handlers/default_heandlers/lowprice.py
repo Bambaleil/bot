@@ -1,8 +1,8 @@
 from loguru import logger
 from telebot.types import Message
 
+from database.db import Request
 from database.db_user import check_user_decorator
-from database.peewee import Request
 from loader import bot
 from states.state_user_hotel import UserInfoState
 
@@ -21,5 +21,4 @@ def lowprice(message: Message, user_request: Request) -> None:
 
 @bot.message_handler(states=UserInfoState.end_lowprice)
 def hostel(message: Message):
-    bot.send_message(message.from_user.id, 'Все')
     bot.set_state(user_id=message.from_user.id, state=None, chat_id=message.chat.id)

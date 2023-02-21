@@ -1,8 +1,10 @@
+from telebot.types import Message
+
 from loader import bot
 
 
 def cancel_world_decorator(func):
-    def wrapped(message, *args, **kwargs):
+    def wrapped(message: Message, *args, **kwargs):
         if message.text == 'cancel':
             bot.set_state(user_id=message.from_user.id, state=None, chat_id=message.chat.id)
             bot.send_message(message.from_user.id, 'Вы отменили опрос для возобновления используйте команды,'
