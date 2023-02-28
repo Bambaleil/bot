@@ -2,9 +2,10 @@ from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from database.db_history_command import get_hotels_command
-from database.db_user import check_user_decorator
 from database.db import Request
+from database.db_user import check_user_decorator
+from func_api.low_high_requests import get_user_by_message
+from handlers.default_heandlers.result import result
 from loader import bot
 from states.state_user_hotel import UserInfoState
 
@@ -21,14 +22,14 @@ def number_buttons_h() -> InlineKeyboardMarkup:
     bth_7 = InlineKeyboardButton('7', callback_data='button_h_7')
     bth_8 = InlineKeyboardButton('8', callback_data='button_h_8')
     bth_9 = InlineKeyboardButton('9', callback_data='button_h_9')
-    bth_10 = InlineKeyboardButton('10', callback_data='button_0')
+    bth_10 = InlineKeyboardButton('10', callback_data='button_h_0')
     key_bord.add(bth_1, bth_2, bth_3, bth_4, bth_5, bth_6, bth_7, bth_8, bth_9, bth_10)
     return key_bord
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_h_'))
 @check_user_decorator
-def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
+def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request) -> None:
     code = call.data[-1]
     bot.edit_message_reply_markup(
         chat_id=call.message.chat.id,
@@ -79,10 +80,10 @@ def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
         bot.set_state(user_id=call.from_user.id, state=UserInfoState.min_price)
         bot.send_message(call.from_user.id, 'Укажите минимальную цену отеля.')
     elif user_request.command == 'lowprice':
-        bot.set_state(user_id=call.from_user.id, state=UserInfoState.end_lowprice)
-        bot.send_message(call.from_user.id, "Вот тут все ваши отели по минимальной цене.")
-        get_hotels_command(call.message)
+        bot.send_message(call.from_user.id, "Идет обработка ваших отелей.")
+        info_hotels = get_user_by_message(call.message, user_request)
+        result(call.message, info_hotels)
     elif user_request.command == 'highprice':
-        bot.set_state(user_id=call.from_user.id, state=UserInfoState.end_highprice)
-        bot.send_message(call.from_user.id, "Вот тут все ваши отели по максимальной цене.")
-        get_hotels_command(call.message)
+        bot.send_message(call.from_user.id, "Идет обработка ваших отелей.")
+        info_hotels = get_user_by_message(call.message, user_request)
+        result(call.message, info_hotels)
