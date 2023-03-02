@@ -15,9 +15,9 @@ def result(message: Message, info_hotels: list) -> None:
                                                   f"От центра: {hotel['by_center']} км.\n"
                                                   f"Цена за ночь: {hotel['price']} USD.\n"
                                                   f"Цена за весь период проживания: "
-                                                  f"{hotel['price'] * hotel['day_live']} USD.\n"
-                                                  f"Сайт: https://www.hotels.com/ho{hotel['id']}\n"
-                                                  f"{'-' * 99}") for url in hotel['url']]
+                                                  f"{round(hotel['price'] * hotel['day_live'], 2)} USD.\n"
+                                                  f"'https://www.hotels.com/h{hotel['id']}.Hotel-Information'\n"
+                                     ) for url in hotel['url']]
             bot.send_media_group(message.chat.id, media)
         else:
             bot.send_message(message.chat.id, f"{hotel['name']}\n"
@@ -26,4 +26,4 @@ def result(message: Message, info_hotels: list) -> None:
                                               f"Цена за ночь: {hotel['price']} USD.\n"
                                               f"Цена за весь период проживания: "
                                               f"{hotel['price'] * hotel['day_live']} USD.\n"
-                                              f"{'-' * 99}")
+                                              f"'https://www.hotels.com/h{hotel['id']}.Hotel-Information'")

@@ -18,16 +18,20 @@ from states.state_user_hotel import UserInfoState
 @cancel_world_decorator
 def get_city(message: Message, user_request: Request) -> None:
     """ Функция записывает город и спрашивает локацию """
-    if message.text.isalpha():
+    if message.text.replace(' ', '').replace('-', '').isalpha():
         logger.info(f'Пользователь выбрал город.')
         user_request.city = message.text
         user_request.save()
         dict_location = api_request(method_endswith='locations/v3/search',
                                     params={"q": {message.text}, "locale": "ru_RU"},
                                     method_type="GET")
-        bot.send_message(message.from_user.id, 'Ваш город {city}.'.format(city=message.text))
-        bot.set_state(user_id=message.from_user.id, state=UserInfoState.location, chat_id=message.chat.id)
-        bot.send_message(message.from_user.id, 'Уточните локацию.', reply_markup=location_markup(dict_location))
+        if len(dict_location) == 0:
+            bot.send_message(message.from_user.id, 'Некорректный ввод. Выберите снова команду')
+            bot.set_state(user_id=message.from_user.id, state=None, chat_id=message.chat.id)
+        else:
+            bot.send_message(message.from_user.id, f'Ваш город {message.text}')
+            bot.set_state(user_id=message.from_user.id, state=UserInfoState.location, chat_id=message.chat.id)
+            bot.send_message(message.from_user.id, 'Уточните локацию.', reply_markup=location_markup(dict_location))
     else:
         bot.send_message(message.from_user.id, 'Город может содержать только буквы.')
 

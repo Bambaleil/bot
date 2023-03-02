@@ -61,7 +61,7 @@ def db_query(message: Message, new_history, user_request):
                                method_type="POST")
     if command == 'bestdeal':
         distance = user_request.distance / 1.60934
-        info_hostels = list(filter(lambda x: x['by_center'] >= distance, info_hostels))
+        info_hostels = list(filter(lambda x: x['by_center'] <= distance, info_hostels))
         info_hostels = info_hostels[:num_hotel]
     info_hostels = (info_hostels[::-1][:num_hotel:] if command == 'highprice' else info_hostels[:num_hotel])
     for hotel in info_hostels:
@@ -85,8 +85,8 @@ def db_query(message: Message, new_history, user_request):
             hotel_id=hotel['id'],
             name=hotel['name'],
             address=hotel['adders'],
-            by_center=hotel['by_center'] * 1.60934,
-            price=hotel['price']
+            by_center=round(hotel['by_center'] * 1.60934, 2),
+            price=round(hotel['price'], 2)
         )
         hotel_history.save()
         if hotel.get('url'):
