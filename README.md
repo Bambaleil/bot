@@ -2,9 +2,9 @@
 
 [![Picture_bot](https://umi.ru/images/cms/data/blog/01-tg-bot.jpg)](https://t.me/HannuMantanaBot)
 
-## Ввидение
+## Введение
 
-Даныый бот сотоит из пары комманд таких как.
+В боте присутствую 6 команд для использования.
 
 - /start
 - /history
@@ -15,11 +15,12 @@
 
 ## Начало работы.
 
-Для активации робота нужно идти по заранию заданному пути начиная с команды `/start` и дальше выбор команды по вашему усмотрению
+Для активации робота нужно идти по заранее заданному пути начиная с команды `/start` и дальше выбор команды по вашему
+усмотрению
 
-## Описание комманд
+## Описание команд
 
-| Команнда | Описание |
+| Команда | Описание |
 | ------ | ------ |
 | /start | Запустить бота |
 | /history | Вывести справку |
@@ -40,19 +41,20 @@ loguru==0.6.0
 
 ## Описание работы
 
-Бот собирает информацию по вашему запросу, после посылает api-запрос на сайт отелей и выдает соответствующее ответы по вашему поиску. Можно выбрать количество отелей и фотографий по ниму.
+Бот собирает информацию по вашему запросу, после посылает api-запрос на сайт отелей и выдает соответствующее ответы по
+вашему поиску. Можно выбрать количество отелей и фотографий по нему.
 
 ## Техническая составляющая
 
-Использование бызы данныйх [SQLite](https://www.sqlite.org/index.html), а также сайта [Rapidapi](https://rapidapi.com/).
+Использование базы данных [SQLite](https://www.sqlite.org/index.html), а также сайта [Rapidapi](https://rapidapi.com/).
 
-## Результаты ввывода
+## Результаты вывода
 
 ```sh
 /history
 ```
 
-[![Picture_command_history]()](https://t.me/HannuMantanaBot)
+[![Picture_command_history](https://gitlab.skillbox.ru/maksim_platonov/python_basic_diploma/-/raw/history_hotels/readme_assets/history.png)](https://t.me/HannuMantanaBot)
 
 ```sh
 /bestdeal
@@ -60,4 +62,4 @@ loguru==0.6.0
 /highprice
 ```
 
-[![Picture_all_command_result_find_hotel]()](https://t.me/HannuMantanaBot)
+[![Picture_all_command_result_find_hotel](https://gitlab.skillbox.ru/maksim_platonov/python_basic_diploma/-/raw/history_hotels/readme_assets/all_command_hotels.png)](https://t.me/HannuMantanaBot)
