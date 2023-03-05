@@ -32,6 +32,8 @@ def calendar_check_in(call: CallbackQuery, user_request: Request) -> None:
                               call.message.chat.id,
                               call.message.message_id)
         logger.info(f'Пользователь выбрал дату заезда {result}')
+        with bot.retrieve_data(call.message.chat.id) as data:
+            data['check_in'] = result
         user_request.check_in = result
         user_request.save()
         calendar_2(call.message)
@@ -41,10 +43,11 @@ def calendar_check_in(call: CallbackQuery, user_request: Request) -> None:
 @check_user_decorator
 def calendar_check_out(call: CallbackQuery, user_request: Request) -> None:
     """ Календарь выезда. Запись выезда. """
+    with bot.retrieve_data(call.message.chat.id) as data:
+        check_in = data['check_in']
     result, key, step = DetailedTelegramCalendar(locale='ru',
                                                  calendar_id=2,
-                                                 min_date=user_request.check_in
-                                                 ).process(call.data)
+                                                 min_date=check_in).process(call.data)
     if not result and key:
         bot.edit_message_text(f'Выберите дату выезда {LSTEP[step]}',
                               call.message.chat.id,
@@ -56,6 +59,8 @@ def calendar_check_out(call: CallbackQuery, user_request: Request) -> None:
                               call.message.chat.id,
                               call.message.message_id)
         logger.info(f'Пользователь выбрал дату выезда {result}.')
+        with bot.retrieve_data(call.message.chat.id) as data:
+            data['check_out'] = result
         user_request.check_out = result
         user_request.save()
         bot.set_state(user_id=call.message.chat.id, state=UserInfoState.photo, chat_id=call.message.chat.id)

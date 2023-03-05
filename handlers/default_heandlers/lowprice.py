@@ -12,6 +12,8 @@ from states.state_user_hotel import UserInfoState
 def lowprice(message: Message, user_request: Request) -> None:
     """ Команда предложения отелей по самой низкой цене."""
     logger.info(f'Пользователь задействовал команду /lowprice.')
+    # with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+    #     data['command'] = message.text[1:]
     user_request.command = message.text[1:]
     user_request.save()
     bot.set_state(user_id=message.from_user.id, state=UserInfoState.city, chat_id=message.chat.id)

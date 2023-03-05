@@ -23,6 +23,8 @@ def location_markup(dict_city: dict) -> InlineKeyboardMarkup:
 def process_callback_location(call: types.CallbackQuery, user_request: Request):
     location, id_location, pattern = call.data.split('_')
     logger.info(f'Пользователь выбрал локацию {location}')
+    with bot.retrieve_data(call.message.chat.id) as data:
+        data['id_location'] = id_location
     user_request.location_id = id_location
     user_request.save()
     bot.send_message(call.from_user.id, f"Ваша локация {location}.")

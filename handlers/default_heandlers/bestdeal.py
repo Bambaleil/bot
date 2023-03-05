@@ -15,6 +15,8 @@ from states.state_user_hotel import UserInfoState
 def bestdeal(message: Message, user_request: Request) -> None:
     """ Команда для вывода отелей, наиболее подходящих по цене и расположению от центра """
     logger.info(f'Пользователь задействовал команду /bestdeal.')
+    # with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+    #     data['command'] = message.text[1:]
     user_request.command = message.text[1:]
     user_request.save()
     bot.set_state(user_id=message.from_user.id, state=UserInfoState.city, chat_id=message.chat.id)
@@ -23,14 +25,13 @@ def bestdeal(message: Message, user_request: Request) -> None:
 
 
 @bot.message_handler(state=UserInfoState.min_price)
-@check_user_decorator
 @cancel_world_decorator
-def get_min_price(message: Message, user_request: Request) -> None:
+def get_min_price(message: Message) -> None:
     """ Функция записывает минимальную цену и запрашивает максимальную цену отеля """
     if message.text.isdigit() and int(message.text) > 0:
         logger.info(f'Пользователь выбрал сумму {message.text}.')
-        user_request.min_price = int(message.text)
-        user_request.save()
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            data['min_price'] = int(message.text)
         bot.send_message(message.from_user.id, 'Укажите максимальную цену отеля.')
         bot.set_state(user_id=message.from_user.id, state=UserInfoState.max_price, chat_id=message.chat.id)
     else:
@@ -40,21 +41,20 @@ def get_min_price(message: Message, user_request: Request) -> None:
 
 
 @bot.message_handler(state=UserInfoState.max_price)
-@check_user_decorator
 @cancel_world_decorator
-def get_max_price(message: Message, user_request: Request) -> None:
+def get_max_price(message: Message) -> None:
     """ Функция записывает максимальную цену и запрашивает дистанцию отеля от центра города """
-    if message.text.isdigit() and user_request.min_price <= int(message.text):
-        logger.info(f'Пользователь выбрал сумму {message.text}.')
-        user_request.max_price = int(message.text)
-        user_request.save()
-        bot.send_message(message.from_user.id,
-                         'Укажите максимальную дистанцию удаления отеля от центра города в километрах.')
-        bot.set_state(user_id=message.from_user.id, state=UserInfoState.distance, chat_id=message.chat.id)
-    else:
-        logger.info('Пользователь ошибся с вводом максимальной цены отеля.')
-        bot.send_message(message.from_user.id,
-                         f'Цена должна быть {"введена цифрами." if message.text.isalpha() else "больше минимальной цены отеля."}')
+    with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+        if message.text.isdigit() and data['min_price'] <= int(message.text):
+            logger.info(f'Пользователь выбрал сумму {message.text}.')
+            data['max_price'] = int(message.text)
+            bot.send_message(message.from_user.id,
+                             'Укажите максимальную дистанцию удаления отеля от центра города в километрах.')
+            bot.set_state(user_id=message.from_user.id, state=UserInfoState.distance, chat_id=message.chat.id)
+        else:
+            logger.info('Пользователь ошибся с вводом максимальной цены отеля.')
+            bot.send_message(message.from_user.id,
+                             f'Цена должна быть {"введена цифрами." if message.text.isalpha() else "больше минимальной цены отеля."}')
 
 
 @bot.message_handler(state=UserInfoState.distance)
@@ -64,7 +64,10 @@ def get_distance(message: Message, user_request: Request) -> None:
     """ Бот записывает дистанцию отелей от центра и выдает их. """
     if message.text.isdigit() and int(message.text) > 0:
         logger.info(f'Пользователь выбрал дистанцию {message.text}.')
-        user_request.distance = int(message.text)
+        with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
+            user_request.min_price = data['min_price']
+            user_request.max_price = data['max_price']
+            user_request.distance = int(message.text)
         user_request.save()
         bot.send_message(message.from_user.id, 'Идет обработка ваших отелей.')
         info_hotels = get_user_by_message(message, user_request)
