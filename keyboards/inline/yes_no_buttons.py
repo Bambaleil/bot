@@ -2,8 +2,6 @@ from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from database.db import Request
-from database.db_user import check_user_decorator
 from keyboards.inline import number_of_photo, number_of_hotels
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -19,8 +17,7 @@ def yes_no() -> InlineKeyboardMarkup:
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_'))
-@check_user_decorator
-def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
+def process_callback_kb1btn1(call: types.CallbackQuery):
     code = call.data[-1]
     bot.edit_message_reply_markup(
         chat_id=call.message.chat.id,
@@ -43,8 +40,6 @@ def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
         logger.info(f'пользователь нажал нет.')
         with bot.retrieve_data(call.message.chat.id) as data:
             data['num_photo'] = 0
-        user_request.num_photo = 0
-        user_request.save()
         bot.set_state(
             user_id=call.message.chat.id,
             state=UserInfoState.num_hostels,

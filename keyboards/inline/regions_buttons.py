@@ -5,8 +5,6 @@ from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
-from database.db import Request
-from database.db_user import check_user_decorator
 from loader import bot
 
 
@@ -19,14 +17,11 @@ def location_markup(dict_city: dict) -> InlineKeyboardMarkup:
 
 
 @bot.callback_query_handler(func=lambda call: call.data.endswith('_'))
-@check_user_decorator
-def process_callback_location(call: types.CallbackQuery, user_request: Request):
+def process_callback_location(call: types.CallbackQuery):
     location, id_location, pattern = call.data.split('_')
     logger.info(f'Пользователь выбрал локацию {location}')
     with bot.retrieve_data(call.message.chat.id) as data:
         data['id_location'] = id_location
-    user_request.location_id = id_location
-    user_request.save()
     bot.send_message(call.from_user.id, f"Ваша локация {location}.")
     bot.edit_message_reply_markup(
         chat_id=call.message.chat.id,

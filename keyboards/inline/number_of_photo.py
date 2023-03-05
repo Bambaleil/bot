@@ -2,8 +2,6 @@ from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from database.db_user import check_user_decorator
-from database.db import Request
 from keyboards.inline import number_of_hotels
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -22,8 +20,7 @@ def number_buttons_p() -> InlineKeyboardMarkup:
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_p_'))
-@check_user_decorator
-def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
+def process_callback_kb1btn1(call: types.CallbackQuery):
     code = call.data[-1]
     bot.edit_message_reply_markup(
         chat_id=call.message.chat.id,
@@ -38,31 +35,25 @@ def process_callback_kb1btn1(call: types.CallbackQuery, user_request: Request):
     if code == '1':
         logger.info('Пользователь нажал кнопку 1 для фото.')
         num = 1
-        user_request.num_photo = 1
         bot.send_message(call.from_user.id, text='Вы выбрали одно фото.')
     elif code == '2':
         logger.info('Пользователь нажал кнопку 2 для фото.')
         num = 2
-        user_request.num_photo = 2
         bot.send_message(call.from_user.id, text='Вы выбрали два фото.')
     elif code == '3':
         logger.info('Пользователь нажал кнопку 3 для фото.')
         num = 3
-        user_request.num_photo = 3
         bot.send_message(call.from_user.id, text='Вы выбрали три фото.')
     elif code == '4':
         logger.info('Пользователь нажал кнопку 4 для фото.')
         num = 4
-        user_request.num_photo = 4
         bot.send_message(call.from_user.id, text='Вы выбрали четыре фото.')
     elif code == '5':
         logger.info('Пользователь нажал кнопку 5 для фото.')
         num = 5
-        user_request.num_photo = 5
         bot.send_message(call.from_user.id, text='Вы выбрали пять фото.')
     with bot.retrieve_data(call.message.chat.id) as data:
         data['num_photo'] = num
-    user_request.save()
     bot.send_message(
         chat_id=call.message.chat.id,
         text='Введите количество отелей не больше 10.',

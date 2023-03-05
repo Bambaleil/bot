@@ -4,8 +4,6 @@ from loguru import logger
 from telebot.types import Message, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
-from database.db_user import check_user_decorator
-from database.db import Request
 from keyboards.inline.yes_no_buttons import yes_no
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -17,8 +15,7 @@ def calendar_2(message: Message) -> None:
 
 
 @bot.callback_query_handler(func=DetailedTelegramCalendar.func(calendar_id=1))
-@check_user_decorator
-def calendar_check_in(call: CallbackQuery, user_request: Request) -> None:
+def calendar_check_in(call: CallbackQuery) -> None:
     """ Календарь заезда. Запись заезда. """
     result, key, step = DetailedTelegramCalendar(calendar_id=1, locale='ru', min_date=date.today()).process(call.data)
     if not result and key:
@@ -34,14 +31,11 @@ def calendar_check_in(call: CallbackQuery, user_request: Request) -> None:
         logger.info(f'Пользователь выбрал дату заезда {result}')
         with bot.retrieve_data(call.message.chat.id) as data:
             data['check_in'] = result
-        user_request.check_in = result
-        user_request.save()
         calendar_2(call.message)
 
 
 @bot.callback_query_handler(func=DetailedTelegramCalendar.func(calendar_id=2))
-@check_user_decorator
-def calendar_check_out(call: CallbackQuery, user_request: Request) -> None:
+def calendar_check_out(call: CallbackQuery) -> None:
     """ Календарь выезда. Запись выезда. """
     with bot.retrieve_data(call.message.chat.id) as data:
         check_in = data['check_in']
@@ -61,7 +55,5 @@ def calendar_check_out(call: CallbackQuery, user_request: Request) -> None:
         logger.info(f'Пользователь выбрал дату выезда {result}.')
         with bot.retrieve_data(call.message.chat.id) as data:
             data['check_out'] = result
-        user_request.check_out = result
-        user_request.save()
         bot.set_state(user_id=call.message.chat.id, state=UserInfoState.photo, chat_id=call.message.chat.id)
         bot.send_message(call.message.chat.id, 'Нужны ли вам фотографии отелей ?', reply_markup=yes_no())
