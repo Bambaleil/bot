@@ -21,5 +21,3 @@ class UserInfoState(StatesGroup):
     min_price = State()
     max_price = State()
     distance = State()
-    end_lowprice = State()
-    end_highprice = State()

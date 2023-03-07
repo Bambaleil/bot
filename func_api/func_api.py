@@ -62,7 +62,6 @@ def post_request(url: str, params: dict) -> list:
                                        ['destinationInfo']['distanceFromDestination']['value'],
                                        'price': data['data']['propertySearch']['properties'][id_dict]['price']
                                        ['lead']['amount']})
-
                 return info_hotel
             elif url.endswith('detail'):
                 logger.info('POST-detail запрос на сайт прошел.')

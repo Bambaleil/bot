@@ -2,8 +2,6 @@ from loguru import logger
 from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from database.db import Request
-from database.db_user import check_user_decorator
 from keyboards.inline import number_of_photo, number_of_hotels
 from loader import bot
 from states.state_user_hotel import UserInfoState
@@ -19,37 +17,36 @@ def yes_no() -> InlineKeyboardMarkup:
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith('button_'))
-@check_user_decorator
-def process_callback_kb1btn1(callback_query: types.CallbackQuery, user_request: Request):
-    code = callback_query.data[-1]
+def process_callback_kb1btn1(call: types.CallbackQuery):
+    code = call.data[-1]
     bot.edit_message_reply_markup(
-        chat_id=callback_query.message.chat.id,
-        message_id=callback_query.message.message_id
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id
     )
     if code == '1':
         logger.info(f'пользователь нажал да.')
         bot.set_state(
-            user_id=callback_query.message.chat.id,
+            user_id=call.message.chat.id,
             state=UserInfoState.num_photo,
-            chat_id=callback_query.message.chat.id
+            chat_id=call.message.chat.id
         )
-        bot.send_message(callback_query.from_user.id, text='Нажали да.')
+        bot.send_message(call.from_user.id, text='Нажали да.')
         bot.send_message(
-            chat_id=callback_query.message.chat.id,
+            chat_id=call.message.chat.id,
             text='Введите количество фото не больше 5.',
             reply_markup=number_of_photo.number_buttons_p()
         )
     elif code == '2':
         logger.info(f'пользователь нажал нет.')
-        user_request.num_photo = 0
-        user_request.save()
+        with bot.retrieve_data(call.message.chat.id) as data:
+            data['num_photo'] = 0
         bot.set_state(
-            user_id=callback_query.message.chat.id,
+            user_id=call.message.chat.id,
             state=UserInfoState.num_hostels,
-            chat_id=callback_query.message.chat.id
+            chat_id=call.message.chat.id
         )
         bot.send_message(
-            chat_id=callback_query.message.chat.id,
+            chat_id=call.message.chat.id,
             text='Введите количество отелей не больше 10.',
             reply_markup=number_of_hotels.number_buttons_h()
         )
