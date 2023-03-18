@@ -57,7 +57,7 @@ class HotelsHistory(BaseModel):
     name = CharField()
     address = CharField()
     by_center = FloatField()
-    price = FloatField()
+    price = DecimalField(default=0, max_digits=8, decimal_places=2)
 
     class Meta:
         db_table = 'history_results'

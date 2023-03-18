@@ -85,8 +85,8 @@ def db_query(message: Message, new_history, user_request):
             hotel_id=hotel['id'],
             name=hotel['name'],
             address=hotel['adders'],
-            by_center=round(hotel['by_center'] * 1.60934, 2),
-            price=round(hotel['price'], 2)
+            by_center=hotel['by_center'] * 1.6,
+            price=hotel['price']
         )
         hotel_history.save()
         if hotel.get('url'):

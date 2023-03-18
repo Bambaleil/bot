@@ -34,7 +34,7 @@ def get_request(url: str, params: dict) -> dict:
                     cities[data['sr'][id_dict]['gaiaId']] = data['sr'][id_dict]['regionNames']['shortName']
             return cities
     except TypeError('Ошибка'):
-        print('Сука')
+        print('Ошибка')
 
 
 def post_request(url: str, params: dict) -> list:
@@ -73,4 +73,4 @@ def post_request(url: str, params: dict) -> list:
                 photo_hostels.append(data['data']['propertyInfo']['summary']['location']['address']['addressLine'])
                 return photo_hostels
     except TypeError('Ошибка'):
-        print('Сука')
+        print('Ошибка')
