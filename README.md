@@ -54,7 +54,7 @@ loguru==0.6.0
 /history
 ```
 
-[![Picture_command_history](https://gitlab.skillbox.ru/maksim_platonov/python_basic_diploma/-/raw/history_hotels/readme_assets/history.png)](https://t.me/HannuMantanaBot)
+[![Picture_command_history](https://github.com/Bambaleil/bot/blob/master/readme_assets/history.png)](https://t.me/HannuMantanaBot)
 
 ```sh
 /bestdeal
@@ -62,4 +62,4 @@ loguru==0.6.0
 /highprice
 ```
 
-[![Picture_all_command_result_find_hotel](https://gitlab.skillbox.ru/maksim_platonov/python_basic_diploma/-/raw/history_hotels/readme_assets/all_command_hotels.png)](https://t.me/HannuMantanaBot)
+[![Picture_all_command_result_find_hotel](https://github.com/Bambaleil/bot/blob/master/readme_assets/all_command_hotels.png)](https://t.me/HannuMantanaBot)
